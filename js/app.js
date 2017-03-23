@@ -20,12 +20,13 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     this.x += this.step*dt;
     if(this.x > 500) {
-        Enemy.create();
+        delete Enemy();
     }
     //console.log(this.y);
     //console.log(player.y);
     if(this.x - player.x > -80 && this.x - player.x < 80 && this.y == player.y) {
         player.y = 300;
+        player.x = 200;
     }
 
 };
@@ -35,9 +36,14 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-Enemy.prototype.create = function() {
-
+var enemyCreate = function() {
+   
 };
+
+var getIndex = function()
+{
+    return Math.floor(Math.random() * (3-0) + 0);
+}
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -85,8 +91,17 @@ Player.prototype.handleInput = function(e) {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-allEnemies = [/*new Enemy(-100, 215, 15), new Enemy(-100, 130, 25),*/ new Enemy(-100, 130, 40)];
+var Verticals = [215, 130, 50];
+allEnemies = [new Enemy(300, 215, 15), new Enemy(100, 130, 25), new Enemy(200, 45, 80)];
 player = new Player(200, 300);
+
+var interval = window.setInterval(function() {
+    step = Math.random() * (120-40) + 40;
+    Y = Verticals[(getIndex())];
+    allEnemies.push(new Enemy(-100, Y, step));
+
+}, 1500)
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
