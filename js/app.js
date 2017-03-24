@@ -24,11 +24,15 @@ var Player = function(x, y) {
     this.sprite = 'images/char-boy.png';
     this.x = x;
     this.y = y;
+    this.points = 0;
+    console.log(this.points, 0);
 };
 Player.prototype.update = function(x, y, dt) {
-    if(this.y < 0) 
+    if(this.y < 0)
+    {
         this.y = 300;
-
+        this.score();
+    }
 };
 
 Player.prototype.render = function() {
@@ -54,7 +58,13 @@ Player.prototype.handleInput = function(e) {
     }       
 };
 
-var Verticals = [215, 130, 50];
+
+Player.prototype.score = function() {
+    this.points += 1000;
+    console.log(this.points);
+};
+
+var Verticals = [215, 130, 45];
 allEnemies = [new Enemy(300, 215, 15), new Enemy(100, 130, 25), new Enemy(200, 45, 80)];
 player = new Player(200, 300);
 
