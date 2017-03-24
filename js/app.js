@@ -13,6 +13,8 @@ Enemy.prototype.update = function(dt) {
     if(this.x - player.x > -80 && this.x - player.x < 80 && this.y == player.y) {
         player.y = 300;
         player.x = 200;
+        player.points = 0;
+        document.getElementById("score").innerHTML = player.points;
     }
 };
 
@@ -25,13 +27,14 @@ var Player = function(x, y) {
     this.x = x;
     this.y = y;
     this.points = 0;
+    this.lives = 3;
     console.log(this.points, 0);
 };
 Player.prototype.update = function(x, y, dt) {
     if(this.y < 0)
     {
         this.y = 300;
-        this.score();
+        this.addScore();
     }
 };
 
@@ -59,9 +62,9 @@ Player.prototype.handleInput = function(e) {
 };
 
 
-Player.prototype.score = function() {
+Player.prototype.addScore = function() {
     this.points += 1000;
-    console.log(this.points);
+    document.getElementById("score").innerHTML = this.points;
 };
 
 var Verticals = [215, 130, 45];
@@ -69,7 +72,7 @@ allEnemies = [new Enemy(300, 215, 15), new Enemy(100, 130, 25), new Enemy(200, 4
 player = new Player(200, 300);
 
 var interval = window.setInterval(function() {
-    step = Math.random() * (120-40) + 40;
+    step = Math.random() * (150-60) + 60;
     Y = Verticals[(getIndex())];
     allEnemies.push(new Enemy(-100, Y, step));
 }, 1500)
