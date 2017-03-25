@@ -1,3 +1,5 @@
+
+
 var Enemy = function(x,y, step) {
     this.x = x;
     this.y = y;
@@ -13,8 +15,9 @@ Enemy.prototype.update = function(dt) {
     if(this.x - player.x > -80 && this.x - player.x < 80 && this.y == player.y) {
         player.y = 300;
         player.x = 200;
-        player.points = 0;
-        document.getElementById("score").innerHTML = player.points;
+        (player.points - 500 > 0) ? player.points -= 500 : player.lives -= 1;
+        player.lifeChecker();
+        player.setScore();
     }
 };
 
@@ -24,11 +27,11 @@ Enemy.prototype.render = function() {
 
 var Player = function(x, y) {
     this.sprite = 'images/char-boy.png';
+    this.heart = 'images/Heart.png';
     this.x = x;
     this.y = y;
     this.points = 0;
     this.lives = 3;
-    console.log(this.points, 0);
 };
 Player.prototype.update = function(x, y, dt) {
     if(this.y < 0)
@@ -38,9 +41,33 @@ Player.prototype.update = function(x, y, dt) {
     }
 };
 
+Player.prototype.addScore = function() {
+    this.points += 100;
+    player.setScore();
+};
+
+Player.prototype.setScore = function() {
+    document.getElementById("score").innerHTML = this.points;
+}
+
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    this.lifeChecker();
+    
 };
+
+Player.prototype.lifeChecker = function() {
+    var i = this.lives;
+    while(i--) {
+        ctx.drawImage(Resources.get(this.heart),30 * i , 500 ,35 , 50 );
+    }
+    if(this.lives == 0) {
+        alert("Game Over!");
+        window.location.reload(true);
+    }
+};
+
+
 Player.prototype.handleInput = function(e) {
     switch (e) {
         case "up":  
@@ -59,12 +86,6 @@ Player.prototype.handleInput = function(e) {
                         this.y += 85;
                     break;
     }       
-};
-
-
-Player.prototype.addScore = function() {
-    this.points += 1000;
-    document.getElementById("score").innerHTML = this.points;
 };
 
 var Verticals = [215, 130, 45];
