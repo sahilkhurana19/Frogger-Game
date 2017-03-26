@@ -151,6 +151,20 @@ Player.prototype.handleInput = function(e) {
         }       
 };
 
+var Object = function() {
+    this.gem = 'images/Gem Orange.png';
+    this.life = 'images/Heart.png';
+    this.star = 'images/Key.png';
+};
+
+Object.prototype.place = function(){
+
+};
+
+Object.prototype.remove = function() {
+
+};
+
 var Verticals = [215, 130, 45];
 allEnemies = [new Enemy(300, 215, 15), new Enemy(100, 130, 25), new Enemy(200, 45, 80)];
 player = new Player(200, 300);
@@ -159,7 +173,6 @@ player = new Player(200, 300);
 var interval = 1500;
 var topSpeed = 180;
 var minSpeed = 140;
-
 
 startInterval(interval, 180, 130);
 
@@ -171,23 +184,10 @@ function startInterval(_interval, _topSpeed, _minSpeed) {
     }, _interval)
 }
 
-/*
-var interval = window.setInterval(function(topSpeed, minSpeed) {
-    step = Math.random() * (200-150) + 150;
-        Y = Verticals[(getIndex())];
-        allEnemies.push(new Enemy(-100, Y, step));
-    
-}, 1200);
-
-var enemyPusher = function() {}
-*/
 var getIndex = function()
 {
     return Math.floor(Math.random() * (3-0) + 0);
 }
-
-
-
 
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
