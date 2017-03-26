@@ -41,6 +41,11 @@ Player.prototype.update = function(x, y, dt) {
     }
 };
 
+Player.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    this.lifeChecker();  
+};
+
 Player.prototype.addScore = function() {
     this.points += 100;
     player.setScore();
@@ -48,12 +53,7 @@ Player.prototype.addScore = function() {
 
 Player.prototype.setScore = function() {
     document.getElementById("score").innerHTML = this.points;
-}
-
-Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    this.lifeChecker();
-    
+    //ctx.fillText(this.points, 25, 50);
 };
 
 Player.prototype.lifeChecker = function() {
@@ -62,11 +62,25 @@ Player.prototype.lifeChecker = function() {
         ctx.drawImage(Resources.get(this.heart),30 * i , 500 ,35 , 50 );
     }
     if(this.lives == 0) {
-        alert("Game Over!");
-        window.location.reload(true);
+       //this.displayDialog("Game Over!");
+        ctx.fillStyle = "black";
+        ctx.fillRect(100, 180, 300, 200);
+        ctx.clearRect(110, 190, 280, 180)
+        ctx.fillStyle = "black";
+        ctx.font = "20px arial";
+        ctx.fillText("Game Over", 200, 250);
+        ctx.fillText("Press Enter to play again",140, 300);
+        document.addEventListener('keyup', (event) => {
+            if(event.key === 'Enter')
+                window.location.reload();
+        }, true);
+        
     }
 };
 
+Player.prototype.displayDialog = function(innerText) {
+    
+};
 
 Player.prototype.handleInput = function(e) {
     switch (e) {
@@ -103,12 +117,15 @@ var getIndex = function()
     return Math.floor(Math.random() * (3-0) + 0);
 }
 
+
+
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
         38: 'up',
         39: 'right',
-        40: 'down'
+        40: 'down',
+        13: 'enter'
     };
 
     player.handleInput(allowedKeys[e.keyCode]);

@@ -64,6 +64,8 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
+        ctx.fillStyle = "yellow"
+        ctx.font = "bold 50px arial";
         reset();
         lastTime = Date.now();
         main();
@@ -161,7 +163,6 @@ var Engine = (function(global) {
     function reset() {
         // noop
     }
-
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when
      * all of these images are properly loaded our game will start.
@@ -175,7 +176,6 @@ var Engine = (function(global) {
         'images/Heart.png'
     ]);
     Resources.onReady(init);
-
     /* Assign the canvas' context object to the global variable (the window
      * object when run in a browser) so that developers can use it more easily
      * from within their app.js files.
