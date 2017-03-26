@@ -32,6 +32,7 @@ var Player = function(x, y) {
     this.y = y;
     this.points = 0;
     this.lives = 3;
+    this.gameOver = false;
 };
 Player.prototype.update = function(x, y, dt) {
     if(this.y < 0)
@@ -63,6 +64,7 @@ Player.prototype.lifeChecker = function() {
     }
     if(this.lives == 0) {
        //this.displayDialog("Game Over!");
+        this.gameOver = true;
         ctx.fillStyle = "black";
         ctx.fillRect(100, 180, 300, 200);
         ctx.clearRect(110, 190, 280, 180)
@@ -70,10 +72,14 @@ Player.prototype.lifeChecker = function() {
         ctx.font = "20px arial";
         ctx.fillText("Game Over", 200, 250);
         ctx.fillText("Press Enter to play again",140, 300);
-        document.addEventListener('keyup', (event) => {
+        document.addEventListener('keyup', function(event) {
             if(event.key === 'Enter')
+            {
                 window.location.reload();
-        }, true);
+            }
+            
+            
+        }, false);
         
     }
 };
@@ -83,23 +89,24 @@ Player.prototype.displayDialog = function(innerText) {
 };
 
 Player.prototype.handleInput = function(e) {
-    switch (e) {
-        case "up":  
-                    this.y -= 85;
-                    break;
-        case "left":    
-                    if(this.x > 0)
-                        this.x -= 100;
-                    break;
-        case "right":
-                    if(this.x < 400)
-                        this.x += 100; 
-                    break;
-        case "down":
-                    if(this.y < 380)
-                        this.y += 85;
-                    break;
-    }       
+    if(this.gameOver === false)
+        switch (e) {
+            case "up":  
+                        this.y -= 85;
+                        break;
+            case "left":    
+                        if(this.x > 0)
+                            this.x -= 100;
+                        break;
+            case "right":
+                        if(this.x < 400)
+                            this.x += 100; 
+                        break;
+            case "down":
+                        if(this.y < 380)
+                            this.y += 85;
+                        break;
+        }       
 };
 
 var Verticals = [215, 130, 45];
