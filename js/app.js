@@ -13,7 +13,7 @@ Enemy.prototype.update = function(dt) {
     if(this.x - player.x > -80 && this.x - player.x < 80 && this.y == player.y) {
         player.y = 300;
         player.x = 200;
-        (player.points - 500 > 0) ? player.points -= 500 : player.lives -= 1;
+        player.lives -= 1;
         player.lifeChecker();
         player.setScore();
     }
@@ -28,7 +28,7 @@ var Player = function(x, y) {
     this.heart = 'images/Heart.png';
     this.x = x;
     this.y = y;
-    this.points = 0;
+    this.points = 2900;
     this.lives = 3;
     this.gameOver = false;
 };
@@ -54,19 +54,50 @@ Player.prototype.setScore = function() {
     document.getElementById("score").innerHTML = this.points;
     if(this.points > 0) {
         switch(this.points){
-            case 500: 
-                interval -= 100;
+            case  300: 
+                interval = 1400;
+                topSpeed = 190;
+                minSpeed = 170;
+                break;
+            case 500:   
+                interval = 1200;
+                topSpeed = 200;
+                minSpeed = 180;
                 break;
             case 700: 
-                interval -= 300;
+                interval = 1000;
+                topSpeed = 220;
+                minSpeed = 190;
                 break;
             case 900:
-                interval -= 100;
+                interval = 800;
+                topSpeed = 240;
+                minSpeed = 220;
                 break;
+            case 1300:
+                interval = 600;
+                topSpeed = 260;
+                minSpeed = 260;
+                break;
+            case 1700:
+                interval = 500;
+                topSpeed = 300;
+                minSpeed = 280;
+                break;
+            case 2500: 
+                interval = 300;
+                topSpeed = 360;
+                minSpeed = 360;
+                break;
+            case 3000:
+                interval = 300;
+                topSpeed = 600;
+                minSpeed = 600;
+                
         }
-        console.log(interval);
+        console.log(this.points, interval, topSpeed, minSpeed);
         clearInterval(intervalID);
-        startInterva(interval);
+        startInterval(interval, 250, 200);
     }
     //ctx.fillText(this.points, 25, 50);
 };
@@ -124,12 +155,17 @@ var Verticals = [215, 130, 45];
 allEnemies = [new Enemy(300, 215, 15), new Enemy(100, 130, 25), new Enemy(200, 45, 80)];
 player = new Player(200, 300);
 
+//Try object instead of seperate vars
 var interval = 1500;
-var intervalID;
+var topSpeed = 180;
+var minSpeed = 140;
 
-function startInterva(_interval) {
+
+startInterval(interval, 180, 130);
+
+function startInterval(_interval, _topSpeed, _minSpeed) {   
     intervalID  = window.setInterval(function(){
-        step = Math.random() * (200-150) + 150;
+        step = Math.random() * (topSpeed-minSpeed) + minSpeed;
         Y = Verticals[(getIndex())];
         allEnemies.push(new Enemy(-100, Y, step));
     }, _interval)
