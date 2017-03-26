@@ -28,7 +28,7 @@ var Player = function(x, y) {
     this.heart = 'images/Heart.png';
     this.x = x;
     this.y = y;
-    this.points = 2900;
+    this.points = 0;
     this.lives = 3;
     this.gameOver = false;
 };
