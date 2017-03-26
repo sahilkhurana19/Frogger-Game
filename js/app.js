@@ -1,5 +1,3 @@
-
-
 var Enemy = function(x,y, step) {
     this.x = x;
     this.y = y;
@@ -54,6 +52,22 @@ Player.prototype.addScore = function() {
 
 Player.prototype.setScore = function() {
     document.getElementById("score").innerHTML = this.points;
+    if(this.points > 0) {
+        switch(this.points){
+            case 500: 
+                interval -= 100;
+                break;
+            case 700: 
+                interval -= 300;
+                break;
+            case 900:
+                interval -= 100;
+                break;
+        }
+        console.log(interval);
+        clearInterval(intervalID);
+        startInterva(interval);
+    }
     //ctx.fillText(this.points, 25, 50);
 };
 
@@ -74,11 +88,8 @@ Player.prototype.lifeChecker = function() {
         ctx.fillText("Press Enter to play again",140, 300);
         document.addEventListener('keyup', function(event) {
             if(event.key === 'Enter')
-            {
                 window.location.reload();
-            }
-            
-            
+
         }, false);
         
     }
@@ -113,16 +124,32 @@ var Verticals = [215, 130, 45];
 allEnemies = [new Enemy(300, 215, 15), new Enemy(100, 130, 25), new Enemy(200, 45, 80)];
 player = new Player(200, 300);
 
-var interval = window.setInterval(function() {
-    step = Math.random() * (150-60) + 60;
-    Y = Verticals[(getIndex())];
-    allEnemies.push(new Enemy(-100, Y, step));
-}, 1500)
+var interval = 1500;
+var intervalID;
 
+function startInterva(_interval) {
+    intervalID  = window.setInterval(function(){
+        step = Math.random() * (200-150) + 150;
+        Y = Verticals[(getIndex())];
+        allEnemies.push(new Enemy(-100, Y, step));
+    }, _interval)
+}
+
+/*
+var interval = window.setInterval(function(topSpeed, minSpeed) {
+    step = Math.random() * (200-150) + 150;
+        Y = Verticals[(getIndex())];
+        allEnemies.push(new Enemy(-100, Y, step));
+    
+}, 1200);
+
+var enemyPusher = function() {}
+*/
 var getIndex = function()
 {
     return Math.floor(Math.random() * (3-0) + 0);
 }
+
 
 
 
