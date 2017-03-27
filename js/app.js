@@ -1,3 +1,5 @@
+
+
 var Enemy = function(x,y, step) {
     this.x = x;
     this.y = y;
@@ -54,46 +56,33 @@ Player.prototype.setScore = function() {
     document.getElementById("score").innerHTML = this.points;
     if(this.points > 0) {
         switch(this.points){
-            case  300: 
-                interval = 1400;
-                topSpeed = 190;
-                minSpeed = 170;
+            case  300:
+                difficultySetter(1400, 190, 170, 2, 3); 
                 break;
-            case 500:   
-                interval = 1200;
-                topSpeed = 200;
-                minSpeed = 180;
+            case 500:
+                difficultySetter(1200, 200, 180);   
                 break;
-            case 700: 
-                interval = 1000;
-                topSpeed = 220;
-                minSpeed = 190;
+            case 700:
+                difficultySetter(1000, 220, 190);  
                 break;
             case 900:
-                interval = 800;
-                topSpeed = 240;
-                minSpeed = 220;
+                difficultySetter(800, 240, 220, 1, 3); 
                 break;
             case 1300:
-                interval = 600;
-                topSpeed = 260;
-                minSpeed = 260;
+                difficultySetter(600, 260, 260);
                 break;
             case 1700:
-                interval = 500;
-                topSpeed = 300;
-                minSpeed = 280;
+                difficultySetter(500, 300, 280, 3, 1);
                 break;
-            case 2500: 
-                interval = 300;
-                topSpeed = 360;
-                minSpeed = 360;
+            case 2500:
+                difficultySetter(300, 360, 360); 
                 break;
             case 3000:
-                interval = 300;
-                topSpeed = 600;
-                minSpeed = 600;
-                
+                difficultySetter(300, 600, 600, 2, 2);
+                break;
+            case 3200:
+                difficultySetter(300, 650, 650);
+                break;                
         }
         console.log(this.points, interval, topSpeed, minSpeed);
         clearInterval(intervalID);
@@ -151,41 +140,56 @@ Player.prototype.handleInput = function(e) {
         }       
 };
 
-var Object = function() {
+var Item = function() {
     this.gem = 'images/Gem Orange.png';
     this.life = 'images/Heart.png';
     this.star = 'images/Key.png';
+    this.height = 95;
+    this.width = 130;
+    this.Xoffset;
+    this.Yoffset;
 };
 
-Object.prototype.place = function(){
-
+Item.prototype.render = function(){
+    ctx.drawImage(Resources.get(this.gem), 101*this.Xoffset ,  84*this.Yoffset ,this.height, this.width);
 };
 
-Object.prototype.remove = function() {
+Item.prototype.create = function(_points) {
+    console.log("In create");
+    
+}
+
+Item.prototype.remove = function() {
 
 };
+Item.prototype.update = function() {
+    //console.log(this.Xoffset * 101 - player.x);
+    //console.log(player.x - this.Xoffset * 101);
+    if(this.Xoffset * 101 - player.x <  10 && this.Xoffset * 101 - player.x >  -10) {
+        console.log("in if")
+        player.points += 200;
+        player.setScore();
+    }
+};
 
-var Verticals = [215, 130, 45];
-allEnemies = [new Enemy(300, 215, 15), new Enemy(100, 130, 25), new Enemy(200, 45, 80)];
-player = new Player(200, 300);
-
-//Try object instead of seperate vars
-var interval = 1500;
-var topSpeed = 180;
-var minSpeed = 140;
-
-startInterval(interval, 180, 130);
+function difficultySetter(_interval, _topSpeed, _minSpeed, _Xoffset = 5, _Yoffset = 5) {
+    interval = _interval;
+    topSpeed = _topSpeed;
+    minSpeed = _minSpeed;
+    item.Xoffset = _Xoffset;
+    item.Yoffset = _Yoffset;
+}
 
 function startInterval(_interval, _topSpeed, _minSpeed) {   
-    intervalID  = window.setInterval(function(){
+    intervalID  = window.setInterval(function() {
         step = Math.random() * (topSpeed-minSpeed) + minSpeed;
         Y = Verticals[(getIndex())];
         allEnemies.push(new Enemy(-100, Y, step));
+        clearInterval(intervalID);
     }, _interval)
 }
 
-var getIndex = function()
-{
+var getIndex = function() {
     return Math.floor(Math.random() * (3-0) + 0);
 }
 
@@ -201,3 +205,15 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 
 });
+
+var Verticals = [215, 130, 45];
+item = new Item();
+allEnemies = [new Enemy(300, 215, 15), new Enemy(100, 130, 25), new Enemy(200, 45, 80)];
+player = new Player(200, 300);
+
+
+//Try object instead of seperate vars
+var interval = 1500;
+var topSpeed = 180;
+var minSpeed = 140;
+startInterval(interval, 180, 130);
