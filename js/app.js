@@ -1,5 +1,3 @@
-
-
 var Enemy = function(x,y, step) {
     this.x = x;
     this.y = y;
@@ -57,7 +55,7 @@ Player.prototype.setScore = function() {
     if(this.points > 0) {
         switch(this.points){
             case  300:
-                difficultySetter(1400, 190, 170, 2, 3); 
+                difficultySetter(1400, 190, 170, 1, 1); 
                 break;
             case 500:
                 difficultySetter(1200, 200, 180);   
@@ -66,19 +64,27 @@ Player.prototype.setScore = function() {
                 difficultySetter(1000, 220, 190);  
                 break;
             case 900:
-                difficultySetter(800, 240, 220, 1, 3); 
+                difficultySetter(800, 240, 220, 1, 3);
+                lifePlacer(4,1) 
                 break;
+            case 1000:
+                lifePlacer(5,5);
             case 1300:
                 difficultySetter(600, 260, 260);
                 break;
             case 1700:
                 difficultySetter(500, 300, 280, 3, 1);
+                lifePlacer(0,1);
+                break;
+            case 1800:
+                lifePlacer(5,5);
                 break;
             case 2500:
                 difficultySetter(300, 360, 360); 
                 break;
             case 3000:
-                difficultySetter(300, 600, 600, 2, 2);
+                difficultySetter(300, 600, 600, 2, 1);
+                lifePlacer(2,3)
                 break;
             case 3200:
                 difficultySetter(300, 650, 650);
@@ -146,38 +152,45 @@ var Item = function() {
     this.star = 'images/Key.png';
     this.height = 95;
     this.width = 130;
-    this.Xoffset;
-    this.Yoffset;
+    this.gemX;
+    this.gemY;
+    this.lifeX;
+    this.lifeY;
 };
 
 Item.prototype.render = function(){
-    ctx.drawImage(Resources.get(this.gem), 101*this.Xoffset ,  84*this.Yoffset ,this.height, this.width);
+    ctx.drawImage(Resources.get(this.gem), 101*this.gemX ,  84*this.gemY ,this.height, this.width);
+    ctx.drawImage(Resources.get(this.life), 102*this.lifeX, 88*this.lifeY, this.height, this.width);
 };
 
-Item.prototype.create = function(_points) {
-    console.log("In create");
-    
-}
-
-Item.prototype.remove = function() {
-
-};
 Item.prototype.update = function() {
-    //console.log(this.Yoffset * 84 , player.y);
-    //console.log(player.x - this.Xoffset * 101);
-    if(this.Xoffset * 101 - player.x <  10 && this.Xoffset * 101 - player.x >  -10 && this.Yoffset * 84 - player.y <  40 && this.Yoffset * 84 - player.y >  -40)  {
+    //console.log(this.gemY * 84 , player.y);
+    //console.log(player.x - this.gemX * 101);
+    if(this.gemX * 101 - player.x <  10 && this.gemX * 101 - player.x >  -10 && this.gemY * 84 - player.y <  40 && this.gemY * 84 - player.y >  -40)  {
         console.log("in if")
         player.points += 200;
         player.setScore();
     }
+    if(this.lifeX * 101 - player.x <  10 && this.lifeX * 101 - player.x >  -10 && this.lifeY * 84 - player.y <  40 && this.lifeY * 84 - player.y >  -40)  {
+        console.log("in if");
+        player.lives += 1;
+        this.lifeX = 5;
+        this.lifeY = 5;
+        player.lifeChecker();
+    }
 };
 
-function difficultySetter(_interval, _topSpeed, _minSpeed, _Xoffset = 5, _Yoffset = 5) {
+function difficultySetter(_interval, _topSpeed, _minSpeed, _gemX = 5, _gemY = 5) {
     interval = _interval;
     topSpeed = _topSpeed;
     minSpeed = _minSpeed;
-    item.Xoffset = _Xoffset;
-    item.Yoffset = _Yoffset;
+    item.gemX = _gemX;
+    item.gemY = _gemY;
+}
+
+function lifePlacer(_lifeX, _lifeY) {
+    item.lifeX = _lifeX;
+    item.lifeY = _lifeY;
 }
 
 function startInterval(_interval, _topSpeed, _minSpeed) {   
@@ -185,7 +198,6 @@ function startInterval(_interval, _topSpeed, _minSpeed) {
         step = Math.random() * (topSpeed-minSpeed) + minSpeed;
         Y = Verticals[(getIndex())];
         allEnemies.push(new Enemy(-100, Y, step));
-        clearInterval(intervalID);
     }, _interval)
 }
 
@@ -208,7 +220,7 @@ document.addEventListener('keyup', function(e) {
 
 var Verticals = [215, 130, 45];
 item = new Item();
-allEnemies = [/*new Enemy(300, 215, 15), new Enemy(100, 130, 25), new Enemy(200, 45, 80)*/];
+allEnemies = [new Enemy(300, 215, 15), new Enemy(100, 130, 25), new Enemy(200, 45, 80)];
 player = new Player(200, 300);
 
 
