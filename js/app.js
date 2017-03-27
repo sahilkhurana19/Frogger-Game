@@ -163,9 +163,9 @@ Item.prototype.remove = function() {
 
 };
 Item.prototype.update = function() {
-    //console.log(this.Xoffset * 101 - player.x);
+    //console.log(this.Yoffset * 84 , player.y);
     //console.log(player.x - this.Xoffset * 101);
-    if(this.Xoffset * 101 - player.x <  10 && this.Xoffset * 101 - player.x >  -10) {
+    if(this.Xoffset * 101 - player.x <  10 && this.Xoffset * 101 - player.x >  -10 && this.Yoffset * 84 - player.y <  40 && this.Yoffset * 84 - player.y >  -40)  {
         console.log("in if")
         player.points += 200;
         player.setScore();
@@ -208,7 +208,7 @@ document.addEventListener('keyup', function(e) {
 
 var Verticals = [215, 130, 45];
 item = new Item();
-allEnemies = [new Enemy(300, 215, 15), new Enemy(100, 130, 25), new Enemy(200, 45, 80)];
+allEnemies = [/*new Enemy(300, 215, 15), new Enemy(100, 130, 25), new Enemy(200, 45, 80)*/];
 player = new Player(200, 300);
 
 
