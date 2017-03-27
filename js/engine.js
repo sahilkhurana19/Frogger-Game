@@ -64,8 +64,6 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
-        ctx.fillStyle = "yellow"
-        ctx.font = "bold 50px arial";
         reset();
         lastTime = Date.now();
         main();
@@ -164,7 +162,9 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+        ctx.fillStyle = "black"
+        ctx.font = "20px arial";
+
     }
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when

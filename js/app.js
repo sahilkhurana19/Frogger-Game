@@ -80,7 +80,8 @@ Player.prototype.setScore = function() {
                 lifePlacer(5,5);
                 break;
             case 2500:
-                difficultySetter(300, 360, 360); 
+                lifePlacer(5,5);
+                difficultySetter(300, 400, 380); 
                 break;
             case 3000:
                 difficultySetter(300, 600, 600, 2, 1);
