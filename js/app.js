@@ -31,17 +31,46 @@ var Player = function(x, y) {
     this.points = 0;
     this.lives = 3;
     this.gameOver = false;
+    this.start = false;
 };
-Player.prototype.update = function(x, y, dt) {
+Player.prototype.update = function(x, y, dt, points) {
+   
     if(this.y < 0)
     {
         this.y = 300;
         this.addScore();
     }
+    
 };
+
+Player.prototype.gameStarter = function() {
+
+    //console.log("In reset")
+    ctx.fillStyle = "black"
+    ctx.font = "30px arial";
+    ctx.fillRect(50, 130, 400, 250);
+    ctx.clearRect(60, 140, 380, 230);
+    ctx.fillText("Instructions:", 175, 190);
+    ctx.font = "15px arial"
+    ctx.fillText("1. Use arrow keys to play.",100, 220);
+    ctx.fillText("2. Reaching water increase your points by 100",100, 240);
+    ctx.fillText("3. Gems increase your points by 200",100, 260);
+    ctx.fillText("4. Hearts will increase your life by 1",100, 280);
+    ctx.fillText("5. Avoid Bugs",100, 300);
+    ctx.fillText("Press Enter to continue", 175, 340)
+    document.addEventListener('keyup', function(event) {
+        if(event.key === 'Enter') {
+            player.start = true;         
+        }
+    }, false);
+    
+}
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    if(this.start === false) {
+        this.gameStarter();
+    }
     this.lifeChecker();  
 };
 
@@ -54,42 +83,54 @@ Player.prototype.setScore = function() {
     document.getElementById("score").innerHTML = this.points;
     if(this.points > 0) {
         switch(this.points){
-            case  300:
-                difficultySetter(1400, 190, 170, 1, 1); 
+            case 300:
+                difficultySetter(1400, 190, 150); 
+                gemPlacer(1,1)
                 break;
             case 500:
-                difficultySetter(1200, 200, 180);   
+                difficultySetter(1200, 200, 170);   
                 break;
             case 700:
                 difficultySetter(1000, 220, 190);  
                 break;
             case 900:
-                difficultySetter(800, 240, 220, 1, 3);
-                lifePlacer(4,1) 
+                lifePlacer(4,1); 
                 break;
             case 1000:
+                difficultySetter(800, 250, 200);
+                gemPlacer(1, 3);
                 lifePlacer(5,5);
+                break;
+            case 1100:
+                lifePlacer(5,5);
+                break;
             case 1300:
-                difficultySetter(600, 260, 260);
+                difficultySetter(600, 290, 240);
                 break;
             case 1700:
-                difficultySetter(500, 300, 280, 3, 1);
-                lifePlacer(0,1);
+                difficultySetter(500, 350, 270);
+                lifePlacer(0,1);                
                 break;
             case 1800:
+                gemPlacer(3,1);
                 lifePlacer(5,5);
                 break;
             case 2500:
                 lifePlacer(5,5);
-                difficultySetter(300, 400, 380); 
+                difficultySetter(350, 500, 420); 
                 break;
             case 3000:
-                difficultySetter(300, 600, 600, 2, 1);
-                lifePlacer(2,3)
+                difficultySetter(300, 650, 550);
+                gemPlacer(2,1);
                 break;
             case 3200:
-                difficultySetter(300, 650, 650);
-                break;                
+                difficultySetter(250, 800, 700);
+                lifePlacer(2,3);
+                break;
+            default:
+                lifePlacer(5,5);
+                gemPlacer(5,5);
+
         }
         console.log(this.points, interval, topSpeed, minSpeed);
         clearInterval(intervalID);
@@ -127,7 +168,7 @@ Player.prototype.displayDialog = function(innerText) {
 };
 
 Player.prototype.handleInput = function(e) {
-    if(this.gameOver === false)
+    if(this.gameOver === false && this.start === true)
         switch (e) {
             case "up":  
                         this.y -= 85;
@@ -165,15 +206,15 @@ Item.prototype.render = function(){
 };
 
 Item.prototype.update = function() {
-    //console.log(this.gemY * 84 , player.y);
-    //console.log(player.x - this.gemX * 101);
     if(this.gemX * 101 - player.x <  10 && this.gemX * 101 - player.x >  -10 && this.gemY * 84 - player.y <  40 && this.gemY * 84 - player.y >  -40)  {
-        console.log("in if")
+        console.log("in gem if")
         player.points += 200;
+        item.gemX = 5;
+        item.gemY = 5;
         player.setScore();
     }
     if(this.lifeX * 101 - player.x <  10 && this.lifeX * 101 - player.x >  -10 && this.lifeY * 84 - player.y <  40 && this.lifeY * 84 - player.y >  -40)  {
-        console.log("in if");
+        console.log("in heart if");
         player.lives += 1;
         this.lifeX = 5;
         this.lifeY = 5;
@@ -181,17 +222,19 @@ Item.prototype.update = function() {
     }
 };
 
-function difficultySetter(_interval, _topSpeed, _minSpeed, _gemX = 5, _gemY = 5) {
+function difficultySetter(_interval, _topSpeed, _minSpeed) {
     interval = _interval;
     topSpeed = _topSpeed;
     minSpeed = _minSpeed;
-    item.gemX = _gemX;
-    item.gemY = _gemY;
 }
 
 function lifePlacer(_lifeX, _lifeY) {
     item.lifeX = _lifeX;
     item.lifeY = _lifeY;
+}
+function gemPlacer(_gemX, _gemY) {
+    item.gemX = _gemX;
+    item.gemY = _gemY;
 }
 
 function startInterval(_interval, _topSpeed, _minSpeed) {   
@@ -230,3 +273,7 @@ var interval = 1500;
 var topSpeed = 180;
 var minSpeed = 140;
 startInterval(interval, 180, 130);
+
+
+
+    
